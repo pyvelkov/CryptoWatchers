@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useEffect, useState } from "react";
+import { BrowserRouter } from "react-router-dom";
+import Axios from "axios";
+import AuthApi from "./components/authorization/AuthApi";
+import Routing from "./components/authorization/Routing";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [loginStatus, setLoginStatus] = useState(false);
+
+	useEffect(() => {
+		Axios.get("http://localhost:5001/login").then((response) => {
+			setLoginStatus(response.data.loggedIn);
+		});
+	}, []);
+	return (
+		<AuthApi.Provider value={{ loginStatus, setLoginStatus }}>
+			<BrowserRouter>
+				<Routing />
+			</BrowserRouter>
+		</AuthApi.Provider>
+	);
 }
 
 export default App;
