@@ -52,72 +52,100 @@ const Home = () => {
 					/>
 				</InputGroup>
 			</Container>
-			<div style={{ marginTop: "5%" }}>
-				<Row xs={1} md={4} className="g-4">
-					{filteredCoins.map((coin, idx) => (
-						<Col key={idx} md={{ offset: 1 }}>
-							<Card bg="info" style={{ width: "20rem" }}>
-								<Card.Header className="text-center">
-									<Card.Title className="text-center">
-										{coin.name}
-									</Card.Title>
-								</Card.Header>
-								<div
-									style={{
-										display: "flex",
-										justifyContent: "center",
-									}}
-								>
-									<Image
-										src={coin.image}
-										roundedCircle
+			<Container>
+				<div style={{ marginTop: "5%" }}>
+					<Row xs={1} md={4} className="g-4">
+						{filteredCoins.map((coin, idx) => (
+							<Col key={idx} md={{ offset: 1 }}>
+								<Card bg="info" style={{ width: "20rem" }}>
+									<Card.Header className="text-center">
+										<Card.Title className="text-center">
+											{coin.name}
+										</Card.Title>
+									</Card.Header>
+									<div
 										style={{
-											height: "50%",
-											width: "50%",
-											marginTop: "10px",
+											display: "flex",
+											justifyContent: "center",
 										}}
-									/>
-								</div>
-								<Card.Body>
-									<Card.Text>
-										<h5>
-											Price:{" "}
-											<Badge
-												bg={
-													coin.price_change_24h < 0
-														? "danger"
-														: "success"
-												}
-											>
-												$ {coin.current_price}
-											</Badge>
-										</h5>
-									</Card.Text>
-									<Card.Text>
-										<h5>
-											Market Cap: ${" "}
-											<Badge bg="primary">
-												$ {coin.market_cap}
-											</Badge>
-										</h5>
-									</Card.Text>
-									<Card.Text>
-										<h5>
-											Market Cap: ${" "}
-											<Badge bg="primary">
-												$ {coin.market_cap}
-											</Badge>
-										</h5>
-									</Card.Text>
-									<Card.Text>
-										<h5>Price: </h5>
-									</Card.Text>
-								</Card.Body>
-							</Card>
-						</Col>
-					))}
-				</Row>
-			</div>
+									>
+										<Image
+											src={coin.image}
+											roundedCircle
+											style={{
+												height: "50%",
+												width: "50%",
+												marginTop: "10px",
+											}}
+										/>
+									</div>
+									<Card.Body>
+										<Card.Text>
+											<h5>
+												Price:{" "}
+												<Badge
+													bg={
+														coin.price_change_24h <
+														0
+															? "danger"
+															: "success"
+													}
+												>
+													$ {coin.current_price}
+												</Badge>
+											</h5>
+										</Card.Text>
+										<Card.Text>
+											<h5>
+												Market Cap:
+												<Badge bg="primary">
+													$ {coin.market_cap}
+												</Badge>
+											</h5>
+										</Card.Text>
+										<Card.Text>
+											<h5>
+												Price Change 24h:
+												<Badge
+													bg={
+														coin.price_change_24h <
+														0
+															? "danger"
+															: "success"
+													}
+												>
+													${" "}
+													{coin.price_change_24h.toFixed(
+														2
+													)}
+												</Badge>
+											</h5>
+										</Card.Text>
+										<Card.Text>
+											<h5>
+												Market Cap Rank:
+												<Badge bg="primary">
+													{coin.market_cap_rank}
+												</Badge>
+											</h5>
+										</Card.Text>
+										<div
+											style={{
+												display: "flex",
+												justifyContent: "center",
+											}}
+										>
+											<Button variant="primary">
+												⭐ Add to watchlist ⭐
+											</Button>
+										</div>
+									</Card.Body>
+								</Card>
+							</Col>
+						))}
+					</Row>
+				</div>
+			</Container>
 		</div>
 	);
 };
