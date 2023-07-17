@@ -31,6 +31,8 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+const coins = require("./controllers/coins");
+
 app.use(
 	session({
 		key: "sessionAuth",
@@ -43,9 +45,7 @@ app.use(
 	})
 );
 
-app.get("/", (req, res) => {
-	return res.json("Reached Backend");
-});
+app.use("/api/coins", coins);
 
 const user = {
 	users: [
@@ -135,6 +135,23 @@ app.post("/logout", (req, res) => {
 	res.clearCookie("sessionAuth");
 	res.redirect("/");
 });
+
+// let coinData;
+// const fetchData = async () => {
+// 	await fetch(
+// 		`https://api.coingecko.com/api/v3/coins/markets?vs_currency=cad&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en`
+// 	)
+// 		.then((response) => response.json())
+// 		.then((json) => {
+// 			coinData = json;
+// 			// console.log(coinData);
+// 		});
+// };
+// fetchData();
+
+// app.get("/coinData", (req, res) => {
+// 	res.send({ data: coinData });
+// });
 
 const port = 5001;
 app.listen(port, () => {
