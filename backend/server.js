@@ -70,8 +70,25 @@ const initDB = async () => {
 };
 initDB();
 
+app.post("/addFavorite", async (req, res) => {
+	const coinAdd = req.body.addedCoin;
+	let usersArr = await client.json.GET("userStorage", "$.users");
+	let userOld = usersArr.users[0];
+	userOld.favorited.push(coinAdd);
+
+	await client.json.set("userStorage", ".", { users: [userOld] });
+});
+
+app.get("/userCoins", async (req, res) => {
+	let usersArr = await client.json.GET("userStorage", "$.users");
+	let userCoins = usersArr.users[0].favorited;
+
+	res.send({ userCoin: userCoins });
+});
+
 app.get("/login", (req, res) => {
 	if (req.session.user) {
+		console.log(req.session.user);
 		res.send({ loggedIn: true, user: req.session.user });
 	} else {
 		res.send({ loggedIn: false });
@@ -83,7 +100,6 @@ app.post("/login", async (req, res) => {
 	const password = req.body.password;
 
 	data = await client.json.get("userStorage");
-	// console.log(data.users.length);
 	for (let i = 0; i < data.users.length; i++) {
 		if (data.users[i].username == username) {
 			bcrypt.compare(
@@ -157,12 +173,6 @@ const port = 5001;
 app.listen(port, () => {
 	console.log(`server listening at port ${port}`);
 });
-
-// const test = {
-// 	email: "plamen.velkov@hotmail.com",
-// 	username: "gurx",
-// 	password: "123",
-// };
 
 // console.log(client.get("userStorage"));
 

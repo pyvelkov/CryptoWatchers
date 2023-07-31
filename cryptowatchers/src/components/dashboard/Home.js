@@ -12,19 +12,38 @@ import {
 	Badge,
 } from "react-bootstrap";
 import axios from "axios";
+import defaultData from "../../assets/coinData";
 
 const Home = () => {
 	const [coinData, setCoinData] = useState([]);
 	const [search, setSearch] = useState("");
+	const [userCoins, setUserCoins] = useState("");
+
+	const getUserCoins = () => {
+		axios.get("http://localhost:5001/userCoins").then((response) => {
+			setUserCoins(response.data.userCoin);
+		});
+	};
+	const checkCoin = (coin) => {
+		let color = "danger";
+		if (userCoins.includes(coin)) {
+			color = "danger";
+		} else {
+			color = "primary";
+		}
+		return color;
+	};
 
 	const fetchData = () => {
 		axios.get("http://localhost:5001/api/coins").then((response) => {
 			setCoinData(response.data.coins);
 		});
+		// setCoinData(defaultData);
 	};
 
 	useEffect(() => {
 		fetchData();
+		getUserCoins();
 	}, []);
 
 	const getFilteredCoins = (search, coins) => {
@@ -37,6 +56,16 @@ const Home = () => {
 	};
 
 	const filteredCoins = getFilteredCoins(search, coinData);
+
+	const addCoin = (coinName) => {
+		axios
+			.post("http://localhost:5001/addFavorite", { addedCoin: coinName })
+			.then((response) => {
+				if (response.data.message) {
+					alert(response.data.message);
+				}
+			});
+	};
 
 	return (
 		<div style={{ marginTop: "5%" }}>
@@ -135,8 +164,16 @@ const Home = () => {
 												justifyContent: "center",
 											}}
 										>
-											<Button variant="primary">
-												⭐ Add to watchlist ⭐
+											<Button
+												variant={checkCoin(coin.name)}
+												onClick={() => {
+													addCoin(coin.name);
+													getUserCoins();
+												}}
+											>
+												{userCoins.includes(coin.name)
+													? "Remove from Watchlist"
+													: "⭐ Add to watchlist ⭐"}
 											</Button>
 										</div>
 									</Card.Body>
